@@ -8,9 +8,10 @@ using CheeseMVC.Data;
 namespace CheeseMVC.Migrations
 {
     [DbContext(typeof(CheeseDbContext))]
-    partial class CheeseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170428005750_latesMigration")]
+    partial class latesMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")
@@ -52,11 +53,17 @@ namespace CheeseMVC.Migrations
 
                     b.Property<int>("MenuID");
 
+                    b.Property<int?>("CheeseMenuCheeseID");
+
+                    b.Property<int?>("CheeseMenuMenuID");
+
                     b.HasKey("CheeseID", "MenuID");
 
                     b.HasIndex("CheeseID");
 
                     b.HasIndex("MenuID");
+
+                    b.HasIndex("CheeseMenuCheeseID", "CheeseMenuMenuID");
 
                     b.ToTable("CheeseMenus");
                 });
@@ -92,6 +99,10 @@ namespace CheeseMVC.Migrations
                         .WithMany("CheeseMenus")
                         .HasForeignKey("MenuID")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("CheeseMVC.Models.CheeseMenu")
+                        .WithMany("CheeseMenus")
+                        .HasForeignKey("CheeseMenuCheeseID", "CheeseMenuMenuID");
                 });
         }
     }
